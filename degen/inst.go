@@ -2,11 +2,12 @@ package degen
 
 import (
 	"fmt"
+	"sort"
+	"strings"
+
 	"github.com/faiface/generics/go/ast"
 	"github.com/faiface/generics/go/token"
 	"github.com/faiface/generics/go/types"
-	"sort"
-	"strings"
 )
 
 func instTypeSpec(cfg *config, genInst *types.GenericInstance, spec *ast.TypeSpec, expr ast.Expr) string {
@@ -191,7 +192,7 @@ func instNode(cfg *config, mapping map[*types.TypeParam]types.Type, node ast.Nod
 		return node
 
 	case
-		*ast.Comment, *ast.CommentGroup, *ast.BadExpr, *ast.BasicLit, *ast.SelectorExpr,
+		*ast.Comment, *ast.CommentGroup, *ast.BadExpr, *ast.BasicLit,
 		*ast.BadStmt, *ast.EmptyStmt, *ast.BranchStmt, *ast.ImportSpec, *ast.BadDecl:
 		return node
 
@@ -227,6 +228,12 @@ func instNode(cfg *config, mapping map[*types.TypeParam]types.Type, node ast.Nod
 			panic("no replacement for a generic type")
 		}
 		return typeToExpr(replacement)
+
+	case *ast.SelectorExpr:
+		return &ast.SelectorExpr{
+			X:   instNode(cfg, mapping, node.X).(ast.Expr),
+			Sel: node.Sel,
+		}
 
 	case *ast.Ellipsis:
 		return &ast.Ellipsis{

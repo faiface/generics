@@ -71,7 +71,7 @@ func degenNode(cfg *config, node ast.Node) (ast.Node, bool) {
 		return node, false
 	case
 		*ast.CommentGroup, *ast.BadExpr, *ast.Ident, *ast.BasicLit,
-		*ast.SelectorExpr, *ast.BadStmt, *ast.EmptyStmt,
+		*ast.BadStmt, *ast.EmptyStmt,
 		*ast.BranchStmt, *ast.ImportSpec, *ast.BadDecl:
 		return node, false
 
@@ -97,6 +97,13 @@ func degenNode(cfg *config, node ast.Node) (ast.Node, bool) {
 		return &ast.FieldList{
 			List: degenList,
 		}, changed
+
+	case *ast.SelectorExpr:
+		degenX, changedX := degenNode(cfg, node.X)
+		return &ast.SelectorExpr{
+			X:   degenX.(ast.Expr),
+			Sel: node.Sel,
+		}, changedX
 
 	case *ast.Ellipsis:
 		degenExpr, changedExpr := degenNode(cfg, node.Elt)
