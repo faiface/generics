@@ -258,6 +258,18 @@ func (sm *SyncMap(type K eq, type V)) Store(key K, value V) {
 
 But don't forget that the `type` keyword is only allowed in the receiver type. For explanation, see [FAQ](#FAQ).
 
+### Generic array lengths (unimplemented!)
+
+The original proposal also included generic array lengths. There is still an intention to support them, but I haven't implemented them yet, because this has been enough work so far. They'd work like this:
+
+```go
+func Reverse(a *[const n]type T) {
+    for i, j := 0, n-1; i < j; i, j = i+1, j-1 {
+        a[i], a[j] = a[j], a[i]
+    }
+}
+```
+
 And that's all! Happy hacking!
 
 ## FAQ
