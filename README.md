@@ -75,11 +75,11 @@ $ go run out.go
 ## More example
 
 That was just a silly little example. For more complex examples, take a look into the [`examples`](examples/) directory:
-- TODO
-- TODO
-- TODO
-- TODO
-- TODO
+- [Slice utilities](examples/sliceutils)
+- [Channel utilities](examples/chanutils)
+- [Math utilities](examples/mathutils)
+- [Linked list](examples/list)
+- [Sync map](examples/syncmap)
 
 ## The proposal
 
