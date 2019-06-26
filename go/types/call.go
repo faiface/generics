@@ -207,6 +207,11 @@ func (check *Checker) call(x *operand, e *ast.CallExpr) exprKind {
 		// unnamed generic type parameters
 		for i := 0; i < len(sig.unnamed); i++ {
 			typ := check.typ(nil, e.Args[i], false)
+			if !assignableToTypeParam(typ, sig.unnamed[i]) {
+				check.errorf(x.pos(), "value of type %v does not satisfy the restrictions of %v", typ, sig.unnamed[i])
+				x.mode = invalid
+				return statement
+			}
 			mapping[sig.unnamed[i]] = typ
 		}
 
