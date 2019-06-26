@@ -25,7 +25,7 @@ func Concat(slices ...[]type T) []T {
 	return result
 }
 
-// Map returns a new slice where each element is transformed by f from the original slice.
+// Map returns a new slice where each element from the original slice is transformed by f.
 func Map(a []type T, f func(T) type U) []U {
 	result := make([]U, len(a))
 	for i := range a {
