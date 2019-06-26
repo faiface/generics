@@ -40,6 +40,7 @@ func main() {
 	fmt.Println(Min(7, 9))
 	fmt.Println(Min(int32(10), 93))
 	fmt.Println(Max(3.14, 31.4))
+	fmt.Println(Max("A", "B"))
 
 	fmt.Println(Sum(1, 2, 3, 4, 5, 6, 7, 8, 9, 10))
 	fmt.Println(Product(1, 2, 3, 4, 5))
