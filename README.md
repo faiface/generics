@@ -206,6 +206,8 @@ func Min(x, y type T ord) T {
 
 Notice that `num` is not a subset of `ord`. This is because the complex number types are not comparable with `<`. To only accept numeric types that are also orderable, combine the two restrictions like this: `type T ord num`.
 
+The `eq`, `ord`, and `num` words have no special meaning outside of the generic definitions. They are not keywords.
+
 ### Generic types
 
 We've covered everything about generic functions, let's move on to generic types.
@@ -235,7 +237,7 @@ type SyncMap(type K eq, type V) struct {
 Methods work as usual:
 
 ```go
-func (sm *SyncMap(type K eq, type V)) Set(key K, value V) {
+func (sm *SyncMap(type K eq, type V)) Store(key K, value V) {
     sm.mu.Lock()
     sm.m[key] = value
     sm.mu.Unlock()
