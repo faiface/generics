@@ -120,7 +120,7 @@ func degenNode(cfg *config, node ast.Node) (ast.Node, bool) {
 			degenElts, changedElts = degenExprList(cfg, node.Elts)
 		)
 		return &ast.CompositeLit{
-			Type: degenType.(ast.Expr),
+			Type: maybeNil(degenType),
 			Elts: degenElts,
 		}, changedType || changedElts
 
