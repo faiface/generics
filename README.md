@@ -258,7 +258,7 @@ func (sm *SyncMap(type K eq, type V)) Store(key K, value V) {
 
 But don't forget that the `type` keyword is only allowed in the receiver type. For explanation, see [FAQ](#FAQ).
 
-### Generic array lengths (unimplemented!)
+### Generic array lengths (unimplemented)
 
 The original proposal also included generic array lengths. There is still an intention to support them, but I haven't implemented them yet, because this has been enough work so far. They'd work like this:
 
