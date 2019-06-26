@@ -2,6 +2,18 @@
 
 This program translates a Go file that uses generics into a regular Go file that can be run.
 
+```
+$ go get github.com/faiface/generics
+```
+
+Then navigate to the repo folder and run:
+
+```
+$ go install
+```
+
+This will install the `generics` command and you should be able to use it just by typing its name (if you have your [`$PATH` set up correctly](https://golang.org/doc/code.html)).
+
 I have taken measures to prevent you from running this in production. Pleas, do **not** run this in production. The single measure taken is that this program only translates a single file. This means that generic functions and types are only usable within that one file.
 
 Here's a trivial example.
@@ -189,7 +201,7 @@ Here are the three possible restrictions:
 2. **`ord`** - Comparable with `<`, `>`, `<=`, `>=`, `==`, `!=`. Subset of `eq`.
 3. **`num`** - All numeric types: `int*`, `uint*`, `float*`, and `complex*`. Operators `+`, `-`, `*`, `/`, `==`, `!=`, and converting from untyped integer constants works.
 
-To use a type restriction, place its name right after the type parameter name in its first occurrence.
+To use a type restriction, place it right after the first occurrence of the type parameter.
 
 For example, here's the generic `Min` function:
 
@@ -204,7 +216,7 @@ func Min(x, y type T ord) T {
 }
 ```
 
-Notice that `num` is not a subset of `ord`. This is because the complex number types are not comparable with `<`. To only accept numeric types that are also orderable, combine the two restrictions like this: `type T ord num`.
+Notice that `num` is not a subset of `ord`. This is because the complex number types are not comparable with `<`. To accept only numeric types that are also orderable, combine the two restrictions like this: `type T ord num`.
 
 The `eq`, `ord`, and `num` words have no special meaning outside of the generic definitions. They are not keywords.
 
@@ -244,10 +256,40 @@ func (sm *SyncMap(type K eq, type V)) Store(key K, value V) {
 }
 ```
 
-But don't forget that with methods, the `type` keyword is only allowed in the receiver type. For explanation, see [FAQ](#FAQ).
+But don't forget that the `type` keyword is only allowed in the receiver type. For explanation, see [FAQ](#FAQ).
 
 And that's all! Happy hacking!
 
 ## FAQ
 
+### What are the advantages of this syntax?
+
+Most proposals propose a syntax that introduces another pair of parentheses to function declarations, like this:
+
+```go
+func Map(type T, U)(a []T, f func(T) U) []U {
+    // ...
+}
+```
+
+There are four main advantages of my syntax compared to the other proposals:
+1. **It's clear where a type parameter gets inferred.** In my proposal concrete type of a type parameter gets inferred exactly where the `type` keyword is. With other proposals, it's not clear where it gets inferred and if it can be inferred.
+2. **It's clear whether a type parameter must be manually specified by the caller.** In my proposal, if a type parameter is unnamed, it must be specified by the caller manually. Otherwise it gets inferred from an argument. There is never a choice between specifying and inferring. In other proposal, it's not clear when the caller must specify the types manually and when they can be inferred, because it depends on the power of the type-checker.
+3. **Fits in with built-in Go functions like `make` and `new`.** The unnamed type parameters even make it possible to give a type to the built-in `new` function. The `make` function is a little more [funky](https://faiface.github.io/funky-tour/). It would also require function overloading.
+4. **No extra parentheses.** Better readability.
+
+### Why is the `type` keyword only allowed in the receiver in methods?
+
 TODO
+
+### Why no ability to create my own restrictions?
+
+TODO
+
+### Why no tests?
+
+This is the test.
+
+## License
+
+[MIT](LICENSE)
