@@ -7,9 +7,9 @@
 package types
 
 import (
-	"local/generics/go/ast"
-	"local/generics/go/constant"
-	"local/generics/go/token"
+	"github.com/faiface/generics/go/ast"
+	"github.com/faiface/generics/go/constant"
+	"github.com/faiface/generics/go/token"
 )
 
 // builtin type-checks a call to the built-in specified by id and

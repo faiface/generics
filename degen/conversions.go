@@ -3,9 +3,9 @@ package degen
 import (
 	"fmt"
 	"io"
-	"local/generics/go/ast"
-	"local/generics/go/token"
-	"local/generics/go/types"
+	"github.com/faiface/generics/go/ast"
+	"github.com/faiface/generics/go/token"
+	"github.com/faiface/generics/go/types"
 )
 
 func tupleToFieldList(t *types.Tuple) *ast.FieldList {

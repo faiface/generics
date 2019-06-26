@@ -7,7 +7,7 @@
 package types
 
 import (
-	"local/generics/go/constant"
+	"github.com/faiface/generics/go/constant"
 )
 
 // Conversion type-checks the conversion T(x).

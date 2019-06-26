@@ -7,7 +7,7 @@
 package types
 
 import (
-	"local/generics/go/ast"
+	"github.com/faiface/generics/go/ast"
 	"sort"
 )
 

@@ -3,14 +3,14 @@
 // license that can be found in the LICENSE file.
 
 // Package gcimporter implements Import for gc-generated object files.
-package gcimporter // import "local/generics/go/internal/gcimporter"
+package gcimporter // import "github.com/faiface/generics/go/internal/gcimporter"
 
 import (
 	"bufio"
 	"fmt"
-	"local/generics/go/build"
-	"local/generics/go/token"
-	"local/generics/go/types"
+	"github.com/faiface/generics/go/build"
+	"github.com/faiface/generics/go/token"
+	"github.com/faiface/generics/go/types"
 	"io"
 	"io/ioutil"
 	"os"

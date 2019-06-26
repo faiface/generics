@@ -2,10 +2,10 @@ package degen
 
 import (
 	"fmt"
-	"local/generics/go/ast"
-	"local/generics/go/importer"
-	"local/generics/go/token"
-	"local/generics/go/types"
+	"github.com/faiface/generics/go/ast"
+	"github.com/faiface/generics/go/importer"
+	"github.com/faiface/generics/go/token"
+	"github.com/faiface/generics/go/types"
 )
 
 func Degen(fset *token.FileSet, input *ast.File, debug bool) (output *ast.File, changed bool) {

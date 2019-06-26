@@ -10,7 +10,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"local/generics/go/token"
+	"github.com/faiface/generics/go/token"
 	"sort"
 	"strings"
 )

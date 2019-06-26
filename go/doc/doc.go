@@ -6,8 +6,8 @@
 package doc
 
 import (
-	"local/generics/go/ast"
-	"local/generics/go/token"
+	"github.com/faiface/generics/go/ast"
+	"github.com/faiface/generics/go/token"
 )
 
 // Package is the documentation for an entire package.

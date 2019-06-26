@@ -8,8 +8,8 @@ package ast
 
 import (
 	"fmt"
-	"local/generics/go/scanner"
-	"local/generics/go/token"
+	"github.com/faiface/generics/go/scanner"
+	"github.com/faiface/generics/go/token"
 	"strconv"
 )
 

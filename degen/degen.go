@@ -1,8 +1,8 @@
 package degen
 
 import (
-	"local/generics/go/ast"
-	"local/generics/go/token"
+	"github.com/faiface/generics/go/ast"
+	"github.com/faiface/generics/go/token"
 )
 
 func degenTypeSpec(cfg *config, spec *ast.TypeSpec) bool {

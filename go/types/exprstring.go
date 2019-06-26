@@ -8,7 +8,7 @@ package types
 
 import (
 	"bytes"
-	"local/generics/go/ast"
+	"github.com/faiface/generics/go/ast"
 )
 
 // ExprString returns the (possibly shortened) string representation for x.

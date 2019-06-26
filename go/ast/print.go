@@ -8,7 +8,7 @@ package ast
 
 import (
 	"fmt"
-	"local/generics/go/token"
+	"github.com/faiface/generics/go/token"
 	"io"
 	"os"
 	"reflect"

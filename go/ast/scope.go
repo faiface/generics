@@ -9,7 +9,7 @@ package ast
 import (
 	"bytes"
 	"fmt"
-	"local/generics/go/token"
+	"github.com/faiface/generics/go/token"
 )
 
 // A Scope maintains the set of named language entities declared

@@ -7,8 +7,8 @@
 package types
 
 import (
-	"local/generics/go/constant"
-	"local/generics/go/token"
+	"github.com/faiface/generics/go/constant"
+	"github.com/faiface/generics/go/token"
 	"strings"
 )
 

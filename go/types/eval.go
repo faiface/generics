@@ -6,8 +6,8 @@ package types
 
 import (
 	"fmt"
-	"local/generics/go/parser"
-	"local/generics/go/token"
+	"github.com/faiface/generics/go/parser"
+	"github.com/faiface/generics/go/token"
 )
 
 // Eval returns the type and, if constant, the value for the

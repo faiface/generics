@@ -7,8 +7,8 @@ package printer
 
 import (
 	"fmt"
-	"local/generics/go/ast"
-	"local/generics/go/token"
+	"github.com/faiface/generics/go/ast"
+	"github.com/faiface/generics/go/token"
 	"io"
 	"os"
 	"strconv"

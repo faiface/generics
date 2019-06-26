@@ -11,10 +11,10 @@ package format
 
 import (
 	"bytes"
-	"local/generics/go/ast"
-	"local/generics/go/parser"
-	"local/generics/go/printer"
-	"local/generics/go/token"
+	"github.com/faiface/generics/go/ast"
+	"github.com/faiface/generics/go/parser"
+	"github.com/faiface/generics/go/printer"
+	"github.com/faiface/generics/go/token"
 	"strings"
 )
 

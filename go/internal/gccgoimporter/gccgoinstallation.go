@@ -6,7 +6,7 @@ package gccgoimporter
 
 import (
 	"bufio"
-	"local/generics/go/types"
+	"github.com/faiface/generics/go/types"
 	"os"
 	"os/exec"
 	"path/filepath"

@@ -9,8 +9,8 @@ package parser
 import (
 	"bytes"
 	"errors"
-	"local/generics/go/ast"
-	"local/generics/go/token"
+	"github.com/faiface/generics/go/ast"
+	"github.com/faiface/generics/go/token"
 	"io"
 	"io/ioutil"
 	"os"

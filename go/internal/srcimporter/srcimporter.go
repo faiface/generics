@@ -4,15 +4,15 @@
 
 // Package srcimporter implements importing directly
 // from source files rather than installed packages.
-package srcimporter // import "local/generics/go/internal/srcimporter"
+package srcimporter // import "github.com/faiface/generics/go/internal/srcimporter"
 
 import (
 	"fmt"
-	"local/generics/go/ast"
-	"local/generics/go/build"
-	"local/generics/go/parser"
-	"local/generics/go/token"
-	"local/generics/go/types"
+	"github.com/faiface/generics/go/ast"
+	"github.com/faiface/generics/go/build"
+	"github.com/faiface/generics/go/parser"
+	"github.com/faiface/generics/go/token"
+	"github.com/faiface/generics/go/types"
 	"path/filepath"
 	"sync"
 )

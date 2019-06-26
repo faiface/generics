@@ -14,7 +14,7 @@ package constant
 
 import (
 	"fmt"
-	"local/generics/go/token"
+	"github.com/faiface/generics/go/token"
 	"math"
 	"math/big"
 	"strconv"

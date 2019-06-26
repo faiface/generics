@@ -4,7 +4,7 @@
 
 package doc
 
-import "local/generics/go/ast"
+import "github.com/faiface/generics/go/ast"
 
 type Filter func(string) bool
 

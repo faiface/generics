@@ -18,9 +18,9 @@ package parser
 
 import (
 	"fmt"
-	"local/generics/go/ast"
-	"local/generics/go/scanner"
-	"local/generics/go/token"
+	"github.com/faiface/generics/go/ast"
+	"github.com/faiface/generics/go/scanner"
+	"github.com/faiface/generics/go/token"
 	"sort"
 	"strconv"
 	"strings"

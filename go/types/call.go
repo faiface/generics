@@ -7,8 +7,8 @@
 package types
 
 import (
-	"local/generics/go/ast"
-	"local/generics/go/token"
+	"github.com/faiface/generics/go/ast"
+	"github.com/faiface/generics/go/token"
 )
 
 func mapVar(mapping map[*TypeParam]Type, v *Var, visited map[Type]Type) *Var {

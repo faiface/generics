@@ -7,9 +7,9 @@ package gcimporter
 import (
 	"encoding/binary"
 	"fmt"
-	"local/generics/go/constant"
-	"local/generics/go/token"
-	"local/generics/go/types"
+	"github.com/faiface/generics/go/constant"
+	"github.com/faiface/generics/go/token"
+	"github.com/faiface/generics/go/types"
 	"sort"
 	"strconv"
 	"strings"

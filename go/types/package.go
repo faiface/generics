@@ -6,7 +6,7 @@ package types
 
 import (
 	"fmt"
-	"local/generics/go/token"
+	"github.com/faiface/generics/go/token"
 )
 
 // A Package describes a Go package.

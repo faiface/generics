@@ -7,7 +7,7 @@ package ast
 import (
 	"bytes"
 	"fmt"
-	"local/generics/go/token"
+	"github.com/faiface/generics/go/token"
 	"sort"
 )
 

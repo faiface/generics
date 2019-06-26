@@ -3,13 +3,13 @@
 // license that can be found in the LICENSE file.
 
 // Package gccgoimporter implements Import for gccgo-generated object files.
-package gccgoimporter // import "local/generics/go/internal/gccgoimporter"
+package gccgoimporter // import "github.com/faiface/generics/go/internal/gccgoimporter"
 
 import (
 	"bytes"
 	"debug/elf"
 	"fmt"
-	"local/generics/go/types"
+	"github.com/faiface/generics/go/types"
 	"io"
 	"os"
 	"os/exec"

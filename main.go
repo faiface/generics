@@ -4,20 +4,21 @@ import (
 	"bytes"
 	"flag"
 	"fmt"
-	"local/generics/degen"
-	"local/generics/go/ast"
-	"local/generics/go/importer"
-	"local/generics/go/parser"
-	"local/generics/go/printer"
-	"local/generics/go/token"
-	"local/generics/go/types"
 	"os"
+
+	"github.com/faiface/generics/degen"
+	"github.com/faiface/generics/go/ast"
+	"github.com/faiface/generics/go/importer"
+	"github.com/faiface/generics/go/parser"
+	"github.com/faiface/generics/go/printer"
+	"github.com/faiface/generics/go/token"
+	"github.com/faiface/generics/go/types"
 )
 
 var (
-	output   = flag.String("out", "out.go", "output file")
-	debug    = flag.Bool("debug", false, "prints intermediate type-checking errors to the standard output and other debug info")
-	maxStage = flag.Int("maxstage", -1, "maximum number of stages")
+	output  = flag.String("out", "out.go", "output file")
+	debug   = flag.Bool("debug", false, "prints intermediate type-checking errors to the standard output and other debug info")
+	maxPass = flag.Int("maxpass", -1, "maximum number of passes")
 )
 
 func init() {
@@ -64,9 +65,9 @@ func main() {
 	}
 
 	// degenerate
-	for stage := 1; *maxStage < 0 || stage <= *maxStage; stage++ {
+	for pass := 1; *maxPass < 0 || pass <= *maxPass; pass++ {
 		if *debug {
-			fmt.Printf("Stage %d.\n", stage)
+			fmt.Printf("PASS %d\n", pass)
 		}
 
 		var changed bool

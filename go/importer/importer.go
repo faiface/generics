@@ -6,12 +6,12 @@
 package importer
 
 import (
-	"local/generics/go/build"
-	"local/generics/go/internal/gccgoimporter"
-	"local/generics/go/internal/gcimporter"
-	"local/generics/go/internal/srcimporter"
-	"local/generics/go/token"
-	"local/generics/go/types"
+	"github.com/faiface/generics/go/build"
+	"github.com/faiface/generics/go/internal/gccgoimporter"
+	"github.com/faiface/generics/go/internal/gcimporter"
+	"github.com/faiface/generics/go/internal/srcimporter"
+	"github.com/faiface/generics/go/token"
+	"github.com/faiface/generics/go/types"
 	"io"
 	"runtime"
 )
