@@ -188,6 +188,14 @@ func new(type T) *T {
 }
 ```
 
+**One important rule:** generic functions cannot be used as values. They can't be assigned to variables and they can't be passed as arguments. To pass a specialized version of a generic function as an argument to another function, wrap it in an anonymous function, like this:
+
+```go
+SomeFunction(func() int {
+    return Read(int)
+})
+```
+
 ### Restricting types
 
 Some functions (or types) want to declare that they don't work with all types, but only with ones that satisfy some conditions. For example, the keys of a map must be comparable. That is a restriction. A `Min` function only works on types that are orderable (i.e. can be compared with `<`).
@@ -274,6 +282,10 @@ And that's all! Happy hacking!
 
 ## FAQ
 
+### Is this an officially accepted proposal?
+
+No! Enjoy it, experiment with it, and don't complain about the syntax ;). Eh, you can, but you know, don't overdo it.
+
 ### What are the advantages of this syntax?
 
 Most proposals propose a syntax that introduces another pair of parentheses to function declarations, like this:
@@ -286,9 +298,11 @@ func Map(type T, U)(a []T, f func(T) U) []U {
 
 There are four main advantages of my syntax compared to the other proposals:
 1. **It's clear where a type parameter gets inferred.** In my proposal concrete type of a type parameter gets inferred exactly where the `type` keyword is. With other proposals, it's not clear where it gets inferred and if it can be inferred.
-2. **It's clear whether a type parameter must be manually specified by the caller.** In my proposal, if a type parameter is unnamed, it must be specified by the caller manually. Otherwise it gets inferred from an argument. There is never a choice between specifying and inferring. In other proposal, it's not clear when the caller must specify the types manually and when they can be inferred, because it depends on the power of the type-checker.
+2. **It's clear whether a type parameter must be specified manually by the caller.** In my proposal, if a type parameter is unnamed, it must be specified by the caller manually. Otherwise it gets inferred from an argument. There is never a choice between specifying and inferring. In other proposal, it's not clear when the caller must specify the types manually and when they can be inferred, because it depends on the power of the type-checker.
 3. **Fits in with built-in Go functions like `make` and `new`.** The unnamed type parameters even make it possible to give a type to the built-in `new` function. The `make` function is a little more [funky](https://faiface.github.io/funky-tour/). It would also require function overloading.
 4. **No extra parentheses.** Better readability.
+
+Furthermore, it introduces no new keywords.
 
 ### Why is the `type` keyword only allowed in the receiver in methods?
 
@@ -296,7 +310,13 @@ TODO
 
 ### Why no ability to create my own restrictions?
 
-TODO
+Because that's where all the unwanted complexity comes from.
+
+Just take a look at Haskell. [Type clasess](https://en.wikipedia.org/wiki/Type_class) in Haskell are a way to specify your own restrictions. They are even simpler than the contracts proposed by the Go team. Yet, you get `Functor`, `Applicative`, `Monad`, `Monoid`, `Traversal`, and a whole bunch of abstract functions that don't make any sense unless you've spent two years studying them. And that's not all. There's a whole culture that makes you spend more time implementing various type classes than implementing actual useful code.
+
+Of course, I'm exaggarating, but just a little bit. Haskell is a great language, but complex. Also, Go would not become Haskell. But there would be the tools and people would misuse them somehow.
+
+Furthermore, most situations for these custom restrictions are already covered by interfaces. With generics, interfaces become even stronger.
 
 ### Why no tests?
 
