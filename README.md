@@ -14,7 +14,7 @@ $ go install
 
 This will install the `generics` command and you should be able to use it just by typing its name (if you have your [`$PATH` set up correctly](https://golang.org/doc/code.html)).
 
-I have taken measures to prevent you from running this in production. Pleas, do **not** run this in production. The single measure taken is that this program only translates a single file. This means that generic functions and types are only usable within that one file.
+I have taken measures to prevent you from running this in production. Please, do **not** run this in production. The single measure taken is that this program only translates a single file. This means that generic functions and types are only usable within that one file.
 
 Here's a trivial example.
 
@@ -317,6 +317,10 @@ Just take a look at Haskell. [Type clasess](https://en.wikipedia.org/wiki/Type_c
 Of course, I'm exaggarating, but just a little bit. Haskell is a great language, but complex. Also, Go would not become Haskell. But there would be the tools and people would misuse them somehow.
 
 Furthermore, most situations for these custom restrictions are already covered by interfaces. With generics, interfaces become even stronger.
+
+### How did you do this?
+
+TODO
 
 ### Why no tests?
 
