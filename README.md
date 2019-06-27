@@ -288,7 +288,7 @@ No! Enjoy it, experiment with it, and don't complain about the syntax ;). Eh, yo
 
 ### What are the advantages of this syntax?
 
-Most proposals propose a syntax that introduces another pair of parentheses to function declarations, like this:
+Most proposals propose a syntax that introduces another pair of parentheses in function declarations, like this:
 
 ```go
 func Map(type T, U)(a []T, f func(T) U) []U {
