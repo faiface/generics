@@ -26,18 +26,18 @@ package main
 import "fmt"
 
 func Reverse(a []type T) {
-	for i, j := 0, len(a)-1; i < j; i, j = i+1, j-1 {
-		a[i], a[j] = a[j], a[i]
-	}
+    for i, j := 0, len(a)-1; i < j; i, j = i+1, j-1 {
+        a[i], a[j] = a[j], a[i]
+    }
 }
 
 func main() {
-	a := []int{1, 2, 3, 4, 5}
-	b := []string{"A", "B", "C"}
-	Reverse(a)
-	Reverse(b)
-	fmt.Println(a)
-	fmt.Println(b)
+    a := []int{1, 2, 3, 4, 5}
+    b := []string{"A", "B", "C"}
+    Reverse(a)
+    Reverse(b)
+    fmt.Println(a)
+    fmt.Println(b)
 }
 ```
 
@@ -47,7 +47,7 @@ Here we have a file called `reverse.go` that uses generics. Here's how we transl
 $ generics -out out.go reverse.go
 ```
 
-A here's what we get!
+And here's what we get!
 
 ```go
 package main
@@ -55,24 +55,24 @@ package main
 import "fmt"
 
 func Reverse_int(a []int) {
-	for i, j := 0, len(a)-1; i < j; i, j = i+1, j-1 {
-		a[i], a[j] = a[j], a[i]
-	}
+    for i, j := 0, len(a)-1; i < j; i, j = i+1, j-1 {
+        a[i], a[j] = a[j], a[i]
+    }
 }
 
 func Reverse_string(a []string) {
-	for i, j := 0, len(a)-1; i < j; i, j = i+1, j-1 {
-		a[i], a[j] = a[j], a[i]
-	}
+    for i, j := 0, len(a)-1; i < j; i, j = i+1, j-1 {
+        a[i], a[j] = a[j], a[i]
+    }
 }
 
 func main() {
-	a := []int{1, 2, 3, 4, 5}
-	b := []string{"A", "B", "C"}
-	Reverse_int(a)
-	Reverse_string(b)
-	fmt.Println(a)
-	fmt.Println(b)
+    a := []int{1, 2, 3, 4, 5}
+    b := []string{"A", "B", "C"}
+    Reverse_int(a)
+    Reverse_string(b)
+    fmt.Println(a)
+    fmt.Println(b)
 }
 ```
 
@@ -95,7 +95,7 @@ That was just a silly little example. For more complex examples, take a look int
 
 ## The proposal
 
-This is a refined version of a proposal I submited a few weeks ago. [You can find it here.](https://gist.github.com/faiface/e5f035f46e88e96231c670abf8cab63f)
+This is a refined version of a proposal I submitted a few weeks ago. [You can find it here.](https://gist.github.com/faiface/e5f035f46e88e96231c670abf8cab63f)
 
 This version is very similar to the original proposal, it only differs in three things:
 1. The `gen` keyword has been replaced with two keywords: `type` and `const`. This implementation only implements the `type` keyword, `const` will be described below nonetheless.
@@ -167,7 +167,7 @@ func Read(type T) T {
 }
 ```
 
-The value of the unnamed parameter is irrelavant. We're only interested in the type. That's why when calling the `Read` function, we pass in the type directly:
+The value of the unnamed parameter is irrelevant. We're only interested in the type. That's why when calling the `Read` function, we pass in the type directly:
 
 ```go
 func main() {
@@ -202,11 +202,11 @@ Some functions (or types) want to declare that they don't work with all types, b
 
 Initially, my proposal excluded any support for restricting types for the purpose of simplicity. The [contracts proposal](https://go.googlesource.com/proposal/+/master/design/go2draft-contracts.md) by the Go team has received (justifiable) criticism for introducing complexity by supporting _contracts_, which make it possible to specify arbitrary restrictions on types.
 
-But some restrictions are extremely useful. That's why I eventually decided to include three possible restrictions that should cover majority of use-cases. This decision is governed by the [80/20 principle](https://en.wikipedia.org/wiki/Pareto_principle).
+But some restrictions are extremely useful. That's why I eventually decided to include three possible restrictions that should cover the majority of use-cases. This decision is governed by the [80/20 principle](https://en.wikipedia.org/wiki/Pareto_principle).
 
 Here are the three possible restrictions:
 1. **`eq`** - Comparable with `==` and `!=`. Usable as map keys.
-2. **`ord`** - Comparable with `<`, `>`, `<=`, `>=`, `==`, `!=`. Subset of `eq`.
+2. **`ord`** - Comparable with `<`, `>`, `<=`, `>=`, `==`, `!=`. A subset of `eq`.
 3. **`num`** - All numeric types: `int*`, `uint*`, `float*`, and `complex*`. Operators `+`, `-`, `*`, `/`, `==`, `!=`, and converting from untyped integer constants works.
 
 To use a type restriction, place it right after the first occurrence of the type parameter.
@@ -298,7 +298,7 @@ func Map(type T, U)(a []T, f func(T) U) []U {
 
 There are four main advantages of my syntax compared to the other proposals:
 1. **It's clear where a type parameter gets inferred.** In my proposal concrete type of a type parameter gets inferred exactly where the `type` keyword is. With other proposals, it's not clear where it gets inferred and if it can be inferred.
-2. **It's clear whether a type parameter must be specified manually by the caller.** In my proposal, if a type parameter is unnamed, it must be specified by the caller manually. Otherwise it gets inferred from an argument. There is never a choice between specifying and inferring. In other proposal, it's not clear when the caller must specify the types manually and when they can be inferred, because it depends on the power of the type-checker.
+2. **It's clear whether a type parameter must be specified manually by the caller.** In my proposal, if a type parameter is unnamed, it must be specified by the caller manually. Otherwise, it gets inferred from an argument. There is never a choice between specifying and inferring. In other proposals, it's not clear when the caller must specify the types manually and when they can be inferred, because it depends on the power of the type-checker.
 3. **Fits in with built-in Go functions like `make` and `new`.** The unnamed type parameters even make it possible to give a type to the built-in `new` function. The `make` function is a little more [funky](https://faiface.github.io/funky-tour/). It would also require function overloading.
 4. **No extra parentheses.** Better readability.
 
@@ -309,7 +309,7 @@ Furthermore, it introduces no new keywords.
 This is to be argued, but here's what I think:
 1. **Easy to understand and read.** Doesn't introduce complexity.
 2. **Orthogonal to other Go features.** For example, these generics don't collide with interfaces. Every problem is either suitable for generics, or for interfaces, (or not none of them), but rarely suitable for both.
-3. **Fast and straightforward type-checkiing.** The type-checking is super simple. Just substitute a type for a type parameter where it says `type` in the signature and you're good to go.
+3. **Fast and straightforward type-checking.** The type-checking is super simple. Just substitute a type for a type parameter where it says `type` in the signature and you're good to go.
 
 ### Why no `type` keyword in function results?
 
@@ -333,27 +333,27 @@ fmt.Printf("%s is %d years old.", name, age)
 
 Should it infer based on the `%s` and `%d` placeholders in `fmt.Printf`? I don't think so.
 
-Forbiding the use of `type` in results forces the programmer to use unnamed type parameters when needed. They, in turn, make it possible to specify the type parameters manually for the caller.
+Forbidding the use of `type` in results forces the programmer to use unnamed type parameters when needed. They, in turn, make it possible to specify the type parameters manually for the caller.
 
 ### Why is the `type` keyword only allowed in the receiver in methods?
 
 There two reasons for this.
 1. **Methods are used to satisfy interfaces.** Methods that are generic beyond their receiver would seriously complicate this prospect. Either the interfaces would have to require generic methods, or the type-checker would have to be able to specialize generic methods for the purpose of satisfying interfaces. Both would complicate the system.
-2. **Reflection.** Reflection makes it possible to discover all methods of a type at runtime. If methods generic beyond their receiver would be possible, reflection would need to be able to discover generic methods. This could be possible, but would be quite complex. This is the same reason that generic functions aren't usable as values.
+2. **Reflection.** Reflection makes it possible to discover all methods of a type at runtime. If methods generic beyond their receiver would be possible, reflection would need to be able to discover generic methods. This could be possible but would be quite complex. This is the same reason that generic functions aren't usable as values.
 
 ### Why no ability to create my own restrictions?
 
 Because that's where all the unwanted complexity comes from.
 
-Just take a look at Haskell. [Type clasess](https://en.wikipedia.org/wiki/Type_class) in Haskell are a way to specify your own restrictions. They are even simpler than the contracts proposed by the Go team. Yet, you get `Functor`, `Applicative`, `Monad`, `Monoid`, `Traversal`, and a whole bunch of abstract functions that don't make any sense unless you've spent two years studying them. And that's not all. There's a whole culture that makes you spend more time implementing various type classes than implementing actual useful code.
+Just take a look at Haskell. [Type clasess](https://en.wikipedia.org/wiki/Type_class) in Haskell are a way to specify your own restrictions. They are even simpler than the contracts proposed by the Go team. Yet, you get `Functor`, `Applicative`, `Monad`, `Monoid`, `Traversal`, and a whole bunch of abstract functions that don't make any sense unless you've spent two years studying them. And that's not all. There's a whole culture that makes you spend more time implementing various type classes than implementing the actually useful code.
 
-Of course, I'm exaggarating, but just a little bit. Haskell is a great language, but complex. Also, Go would not become Haskell. But there would be the tools and people would misuse them somehow.
+Of course, I'm exaggerating, but just a little bit. Haskell is a great language, but complex. Also, Go would not become Haskell. But there would be the tools and people would misuse them somehow.
 
 Furthermore, most situations for these custom restrictions are already covered by interfaces. With generics, interfaces become even stronger.
 
 ### How did you do this?
 
-I copied the whole tree of [`"go/*"`](https://golang.org/pkg/go/) package from the standard library. They implement parsing, importing, and type-checking of Go code, so that was handy. Then I extended them (namely the `"go/ast"`, `"go/parser"`, `"go/printer"`, `"go/types"`) with support for generics. Parsing generics, type-checking generics. I also made them emit special information about generic calls and type instances that made it possible to implement the translating tool.
+I copied the whole tree of [`"go/*"`](https://golang.org/pkg/go/) package from the standard library. They implement parsing, importing, and type-checking of Go code, so that was handy. Then I extended them (namely `"go/ast"`, `"go/parser"`, `"go/printer"`, `"go/types"`) with support for generics. Parsing generics, type-checking generics. I also made them emit special information about generic calls and type instances that made it possible to implement the translating tool.
 
 Now, the translation itself it a bit hacky. It works in passes. A single pass works like this:
 1. Parse and type-check the code.
@@ -363,7 +363,7 @@ Now, the translation itself it a bit hacky. It works in passes. A single pass wo
 5. Replace all generic calls and type instances in the non-generic function with calls to the new, instantiated functions and types.
 6. Write the result.
 
-And I repeat this process until nothing changes. At the end, I remove all generic functions from the source and write the final result.
+And I repeat this process until nothing changes. In the end, I remove all generic functions from the source and write the final result.
 
 ### Why no tests?
 
