@@ -307,9 +307,9 @@ func Map(type T, U)(a []T, f func(T) U) []U {
 ```
 
 There are four main advantages of my syntax compared to the other proposals:
-1. **It's clear where a type parameter gets inferred.** In my proposal concrete type of a type parameter gets inferred exactly where the `type` keyword is. With other proposals, it's not clear where it gets inferred and if it can be inferred.
+1. **It's clear where a type parameter gets inferred.** In my proposal concrete type of a type parameter gets inferred exactly where the `type` keyword is. With other proposals, it's not clear where it gets inferred and if it can be inferred at all.
 2. **It's clear whether a type parameter must be specified manually by the caller.** In my proposal, if a type parameter is unnamed, it must be specified by the caller manually. Otherwise, it gets inferred from an argument. There is never a choice between specifying and inferring. In other proposals, it's not clear when the caller must specify the types manually and when they can be inferred, because it depends on the power of the type-checker.
-3. **Fits in with built-in Go functions like `make` and `new`.** The unnamed type parameters even make it possible to give a type to the built-in `new` function. The `make` function is a little more [funky](https://faiface.github.io/funky-tour/). It would also require function overloading.
+3. **Fits in with built-in Go functions like `make` and `new`.** The unnamed type parameters even make it possible to give a type to the built-in `new` function. The `make` function is a little more [funky](https://faiface.github.io/funky-tour/), though. It would also require function overloading.
 4. **No extra parentheses.** Better readability.
 
 Furthermore, it introduces no new keywords.
@@ -319,7 +319,7 @@ Furthermore, it introduces no new keywords.
 This is to be argued, but here's what I think:
 1. **Easy to understand and read.** Doesn't introduce complexity.
 2. **Orthogonal to other Go features.** For example, these generics don't collide with interfaces. Every problem is either suitable for generics, or for interfaces, (or not none of them), but rarely suitable for both.
-3. **Fast and straightforward type-checking.** The type-checking is super simple. Just substitute a type for a type parameter where it says `type` in the signature and you're good to go.
+3. **Fast and straightforward type-checking.** The type-checking is super simple. Just substitute a concrete type for a type parameter where it says `type` in the signature and you're good to go.
 
 ### Why no `type` keyword in function results?
 
@@ -363,13 +363,13 @@ Furthermore, most situations for these custom restrictions are already covered b
 
 ### How did you do this?
 
-I copied the whole tree of [`"go/*"`](https://golang.org/pkg/go/) package from the standard library. They implement parsing, importing, and type-checking of Go code, so that was handy. Then I extended them (namely `"go/ast"`, `"go/parser"`, `"go/printer"`, `"go/types"`) with support for generics. Parsing generics, type-checking generics. I also made them emit special information about generic calls and type instances that made it possible to implement the translating tool.
+I copied the whole tree of [`"go/*"`](https://golang.org/pkg/go/) packages from the standard library. They implement parsing, importing, and type-checking of Go code. Then I extended them (namely `"go/ast"`, `"go/parser"`, `"go/printer"`, `"go/types"`) with support for generics. Parsing generics, type-checking generics. I also made them emit special information about generic calls and type instances that made it easier to implement the translating tool.
 
 Now, the translation itself it a bit hacky. It works in passes. A single pass works like this:
 1. Parse and type-check the code.
 2. Find all non-generic functions.
 3. In them, find all generic calls and generic type instances (their type parameters must be concrete).
-4. Instantiate the found generic functions and types with the used parameters. This means copying them and replacing all uses of the type parameters with concrete types.
+4. Instantiate the found generic functions and types with the used parameters. This means copy-pasting their original generic implementation and replacing all uses of the type parameters with concrete types.
 5. Replace all generic calls and type instances in the non-generic function with calls to the new, instantiated functions and types.
 6. Write the result.
 
