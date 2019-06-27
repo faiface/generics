@@ -369,6 +369,10 @@ Now, the translation itself it a bit hacky. It works in passes. A single pass wo
 
 And I repeat this process until nothing changes. In the end, I remove all generic functions from the source and write the final result.
 
+### Why is the generated code so ugly?
+
+Sorry. Blame `"go/printer"`.
+
 ### Why no tests?
 
 This is the test.
