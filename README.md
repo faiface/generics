@@ -286,6 +286,10 @@ And that's all! Happy hacking!
 
 No! Enjoy it, experiment with it, and don't complain about the syntax ;). Eh, you can, but you know, don't overdo it.
 
+### Does this work?
+
+Yep! There's only one limitation: it only translates a single file. And there's only one unimplemented feature: generic array lengths.
+
 ### What are the advantages of this syntax?
 
 Most proposals propose a syntax that introduces another pair of parentheses in function declarations, like this:
