@@ -95,12 +95,12 @@ That was just a silly little example. For more complex examples, take a look int
 
 ## The proposal
 
-This is a refined version of a proposal I submitted a few weeks ago. [You can find it here.](https://gist.github.com/faiface/e5f035f46e88e96231c670abf8cab63f)
+This is a refined version of a proposal I submitted a few weeks ago. [You can find the original version here.](https://gist.github.com/faiface/e5f035f46e88e96231c670abf8cab63f)
 
 This version is very similar to the original proposal, it only differs in three things:
 1. The `gen` keyword has been replaced with two keywords: `type` and `const`. This implementation only implements the `type` keyword, `const` will be described below nonetheless.
-2. An `ord` type restriction addition to the previously described `eq` and `num`.
-3. The `type` keyword now must appear also in the declarations of generic types.
+2. An `ord` type restriction in addition to the previously described `eq` and `num`.
+3. The `type` keyword now must also appear in the declarations of generic types.
 
 Now I will describe the proposal as concisely as I can. If you have questions, scroll down to the [FAQ](#FAQ) section.
 
@@ -121,9 +121,9 @@ func Map(a []T, f func(T) U) []U {
 
 > In case you don't know, a `Map` function takes a slice and a function and returns a new slice with each element replaced by the result of the function applied to the original element.
 >
-> For example: `Map([]float64{1, 4, 9, 16}, math.Sqrt)` returns a new slice `[]float64{1, 2, 3, 4}`, taking the square root of each of the original elements.
+> For example: `Map([]float64{1, 4, 9, 16}, math.Sqrt)` returns a new slice `[]float64{1, 2, 3, 4}`, taking the square root of each of the original numbers.
 
-To make this **valid** Go code under my proposal, all you need to do is to mark the _first_ (and only the first) occurrence of each type parameter (= an unknown type) in the signature with the `type` keyword. The `Map` function has two:
+To make this a **valid** Go code under my proposal, all you need to do is to mark the _first_ (and only the first) occurrence of each type parameter (= an unknown type) in the signature with the `type` keyword. The `Map` function has two:
 
 ```go
 //           here              here
@@ -139,14 +139,18 @@ func Map(a []type T, f func(T) type U) []U {
 
 Nothing else changed.
 
+The `type` keyword basically declares a type parameter in a signature. The name is then visible in the entire scope of the function.
+
 There are three rules about the placement of the `type` keyword in signatures:
 1. It's only allowed in package-level function declarations.
 2. In functions, it's only allowed in the list of parameters. Particularly, it's **disallowed** in the list of results.
 3. In methods, it's only allowed in the receiver type.
 
+The last two rules can be remembered together: `type` is only allowed inside the first pair of parentheses.
+
 ### Unnamed type parameters
 
-Okay, so no `type` in the list of results. But how do we do a function like this? The only occurrence of the `T` type is in the result:
+Okay, so no `type` in the list of results. But how do we make a function like this `Read`? The only occurrence of the `T` type is in the result:
 
 ```go
 // DISALLOWED!!
@@ -179,6 +183,8 @@ func main() {
 
 Don't worry, this doesn't send us to the [dependent typing land](https://en.wikipedia.org/wiki/Dependent_type) because we can't return types, only accept them.
 
+It's simple, if a parameter is an unnamed generic parameter, you pass a type directly. Otherwise, you pass a value and the type system will infer the type.
+
 This notation also makes it possible to give a type to the built-in `new` function:
 
 ```go
@@ -188,7 +194,7 @@ func new(type T) *T {
 }
 ```
 
-**One important rule:** generic functions cannot be used as values. They can't be assigned to variables and they can't be passed as arguments. To pass a specialized version of a generic function as an argument to another function, wrap it in an anonymous function, like this:
+**One important rule:** generic functions cannot be used as values. They can't be assigned to variables and they can't be passed as arguments. To pass a specialized version of a generic function as an argument, wrap it in an anonymous function, like this:
 
 ```go
 SomeFunction(func() int {
@@ -207,7 +213,7 @@ But some restrictions are extremely useful. That's why I eventually decided to i
 Here are the three possible restrictions:
 1. **`eq`** - Comparable with `==` and `!=`. Usable as map keys.
 2. **`ord`** - Comparable with `<`, `>`, `<=`, `>=`, `==`, `!=`. A subset of `eq`.
-3. **`num`** - All numeric types: `int*`, `uint*`, `float*`, and `complex*`. Operators `+`, `-`, `*`, `/`, `==`, `!=`, and converting from untyped integer constants works.
+3. **`num`** - All numeric types: `int*`, `uint*`, `float*`, and `complex*`. Operators `+`, `-`, `*`, `/`, `==`, `!=`, and converting from untyped integer constants works. Not a subset of `ord`.
 
 To use a type restriction, place it right after the first occurrence of the type parameter.
 
@@ -224,7 +230,7 @@ func Min(x, y type T ord) T {
 }
 ```
 
-Notice that `num` is not a subset of `ord`. This is because the complex number types are not comparable with `<`. To accept only numeric types that are also orderable, combine the two restrictions like this: `type T ord num`.
+Notice that `num` is not a subset of `ord`. This is because the complex number types are not comparable with `<`. To accept only the numeric types that are also orderable, combine the two restrictions like this: `type T ord num`.
 
 The `eq`, `ord`, and `num` words have no special meaning outside of the generic definitions. They are not keywords.
 
@@ -368,6 +374,10 @@ Now, the translation itself it a bit hacky. It works in passes. A single pass wo
 6. Write the result.
 
 And I repeat this process until nothing changes. In the end, I remove all generic functions from the source and write the final result.
+
+### Can I break it?
+
+Sure. There are bugs, 100%. I've already caught and fixed many of them, but if you find some new, please file an issue.
 
 ### Why is the generated code so ugly?
 
