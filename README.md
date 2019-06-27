@@ -304,9 +304,42 @@ There are four main advantages of my syntax compared to the other proposals:
 
 Furthermore, it introduces no new keywords.
 
+### What are some other advantages of this proposal?
+
+This is to be argued, but here's what I think:
+1. **Easy to understand and read.** Doesn't introduce complexity.
+2. **Orthogonal to other Go features.** For example, these generics don't collide with interfaces. Every problem is either suitable for generics, or for interfaces, (or not none of them), but rarely suitable for both.
+3. **Fast and straightforward type-checkiing.** The type-checking is super simple. Just substitute a type for a type parameter where it says `type` in the signature and you're good to go.
+
+### Why no `type` keyword in function results?
+
+Because it would make type-checking ambiguous. Let's say that `Read` can be written like this:
+
+```go
+func Read() type T {
+    var x T
+    fmt.Scan(&x)
+    return x
+}
+```
+
+Now, what types should it read here?
+
+```go
+name := Read()
+age := Read()
+fmt.Printf("%s is %d years old.", name, age)
+```
+
+Should it infer based on the `%s` and `%d` placeholders in `fmt.Printf`? I don't think so.
+
+Forbiding the use of `type` in results forces the programmer to use unnamed type parameters when needed. They, in turn, make it possible to specify the type parameters manually for the caller.
+
 ### Why is the `type` keyword only allowed in the receiver in methods?
 
-TODO
+There two reasons for this.
+1. **Methods are used to satisfy interfaces.** Methods that are generic beyond their receiver would seriously complicate this prospect. Either the interfaces would have to require generic methods, or the type-checker would have to be able to specialize generic methods for the purpose of satisfying interfaces. Both would complicate the system.
+2. **Reflection.** Reflection makes it possible to discover all methods of a type at runtime. If methods generic beyond their receiver would be possible, reflection would need to be able to discover generic methods. This could be possible, but would be quite complex. This is the same reason that generic functions aren't usable as values.
 
 ### Why no ability to create my own restrictions?
 
@@ -320,7 +353,17 @@ Furthermore, most situations for these custom restrictions are already covered b
 
 ### How did you do this?
 
-TODO
+I copied the whole tree of [`"go/*"`](https://golang.org/pkg/go/) package from the standard library. They implement parsing, importing, and type-checking of Go code, so that was handy. Then I extended them (namely the `"go/ast"`, `"go/parser"`, `"go/printer"`, `"go/types"`) with support for generics. Parsing generics, type-checking generics. I also made them emit special information about generic calls and type instances that made it possible to implement the translating tool.
+
+Now, the translation itself it a bit hacky. It works in passes. A single pass works like this:
+1. Parse and type-check the code.
+2. Find all non-generic functions.
+3. In them, find all generic calls and generic type instances (their type parameters must be concrete).
+4. Instantiate the found generic functions and types with the used parameters. This means copying them and replacing all uses of the type parameters with concrete types.
+5. Replace all generic calls and type instances in the non-generic function with calls to the new, instantiated functions and types.
+6. Write the result.
+
+And I repeat this process until nothing changes. At the end, I remove all generic functions from the source and write the final result.
 
 ### Why no tests?
 
