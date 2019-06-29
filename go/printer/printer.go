@@ -105,7 +105,7 @@ func (p *printer) internalError(msg ...interface{}) {
 	if debug {
 		fmt.Print(p.pos.String() + ": ")
 		fmt.Println(msg...)
-		panic("go/printer")
+		panic("github.com/faiface/generics/go/printer")
 	}
 }
 
@@ -969,7 +969,7 @@ func (p *printer) print(args ...interface{}) {
 
 		default:
 			fmt.Fprintf(os.Stderr, "print: unsupported argument %v (%T)\n", arg, arg)
-			panic("go/printer type")
+			panic("github.com/faiface/generics/go/printer type")
 		}
 		// data != ""
 
@@ -1152,7 +1152,7 @@ func (p *printer) printNode(node interface{}) error {
 	return nil
 
 unsupported:
-	return fmt.Errorf("go/printer: unsupported node type %T", node)
+	return fmt.Errorf("github.com/faiface/generics/go/printer: unsupported node type %T", node)
 }
 
 // ----------------------------------------------------------------------------

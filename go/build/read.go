@@ -62,7 +62,7 @@ func (r *importReader) readByte() byte {
 func (r *importReader) peekByte(skipSpace bool) byte {
 	if r.err != nil {
 		if r.nerr++; r.nerr > 10000 {
-			panic("go/build: import reader looping")
+			panic("github.com/faiface/generics/go/build: import reader looping")
 		}
 		return 0
 	}

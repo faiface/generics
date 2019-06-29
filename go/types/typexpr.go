@@ -7,11 +7,12 @@
 package types
 
 import (
+	"sort"
+	"strconv"
+
 	"github.com/faiface/generics/go/ast"
 	"github.com/faiface/generics/go/constant"
 	"github.com/faiface/generics/go/token"
-	"sort"
-	"strconv"
 )
 
 // ident type-checks identifier e and initializes x with the value or type of e.
@@ -655,11 +656,18 @@ func (check *Checker) interfaceType(scope *Scope, iface *Interface, ityp *ast.In
 }
 
 // byUniqueTypeName named type lists can be sorted by their unique type names.
-type byUniqueTypeName []*Named
+type byUniqueTypeName []Type
 
 func (a byUniqueTypeName) Len() int           { return len(a) }
-func (a byUniqueTypeName) Less(i, j int) bool { return a[i].obj.Id() < a[j].obj.Id() }
+func (a byUniqueTypeName) Less(i, j int) bool { return sortName(a[i]) < sortName(a[j]) }
 func (a byUniqueTypeName) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+
+func sortName(t Type) string {
+	if named, _ := t.(*Named); named != nil {
+		return named.obj.Id()
+	}
+	return ""
+}
 
 // byUniqueMethodName method lists can be sorted by their unique method names.
 type byUniqueMethodName []*Func

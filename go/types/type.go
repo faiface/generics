@@ -248,8 +248,8 @@ func (s *Signature) Variadic() bool { return s.variadic }
 
 // An Interface represents an interface type.
 type Interface struct {
-	methods   []*Func  // ordered list of explicitly declared methods
-	embeddeds []*Named // ordered list of explicitly embedded types
+	methods   []*Func // ordered list of explicitly declared methods
+	embeddeds []Type  // ordered list of explicitly embedded types
 
 	allMethods []*Func // ordered list of methods declared with or embedded in this interface (TODO(gri): replace with mset)
 }
@@ -262,8 +262,28 @@ var emptyInterface = Interface{allMethods: markComplete}
 var markComplete = make([]*Func, 0)
 
 // NewInterface returns a new (incomplete) interface for the given methods and embedded types.
-// To compute the method set of the interface, Complete must be called.
+// Each embedded type must have an underlying type of interface type.
+// NewInterface takes ownership of the provided methods and may modify their types by setting
+// missing receivers. To compute the method set of the interface, Complete must be called.
+//
+// Deprecated: Use NewInterfaceType instead which allows any (even non-defined) interface types
+// to be embedded. This is necessary for interfaces that embed alias type names referring to
+// non-defined (literal) interface types.
 func NewInterface(methods []*Func, embeddeds []*Named) *Interface {
+	tnames := make([]Type, len(embeddeds))
+	for i, t := range embeddeds {
+		tnames[i] = t
+	}
+	return NewInterfaceType(methods, tnames)
+}
+
+// NewInterfaceType returns a new (incomplete) interface for the given methods and embedded types.
+// Each embedded type must have an underlying type of interface type (this property is not
+// verified for defined types, which may be in the process of being set up and which don't
+// have a valid underlying type yet).
+// NewInterfaceType takes ownership of the provided methods and may modify their types by setting
+// missing receivers. To compute the method set of the interface, Complete must be called.
+func NewInterfaceType(methods []*Func, embeddeds []Type) *Interface {
 	typ := new(Interface)
 
 	if len(methods) == 0 && len(embeddeds) == 0 {
@@ -275,15 +295,24 @@ func NewInterface(methods []*Func, embeddeds []*Named) *Interface {
 		if mset.insert(m) != nil {
 			panic("multiple methods with the same name")
 		}
-		// set receiver
-		// TODO(gri) Ideally, we should use a named type here instead of
-		// typ, for less verbose printing of interface method signatures.
-		m.typ.(*Signature).recv = NewVar(m.pos, m.pkg, "", typ)
+		// set receiver if we don't have one
+		if sig := m.typ.(*Signature); sig.recv == nil {
+			sig.recv = NewVar(m.pos, m.pkg, "", typ)
+		}
 	}
 	sort.Sort(byUniqueMethodName(methods))
 
-	if embeddeds != nil {
-		sort.Sort(byUniqueTypeName(embeddeds))
+	if len(embeddeds) > 0 {
+		// All embedded types should be interfaces; however, defined types
+		// may not yet be fully resolved. Only verify that non-defined types
+		// are interfaces. This matches the behavior of the code before the
+		// fix for #25301 (issue #25596).
+		for _, t := range embeddeds {
+			if _, ok := t.(*Named); !ok && !IsInterface(t) {
+				panic("embedded type is not an interface")
+			}
+		}
+		sort.Stable(byUniqueTypeName(embeddeds))
 	}
 
 	typ.methods = methods
@@ -303,7 +332,7 @@ func (t *Interface) NumEmbeddeds() int { return len(t.embeddeds) }
 
 // Embedded returns the i'th embedded type of interface t for 0 <= i < t.NumEmbeddeds().
 // The types are ordered by the corresponding TypeName's unique Id.
-func (t *Interface) Embedded(i int) *Named { return t.embeddeds[i] }
+func (t *Interface) Embedded(i int) Type { return t.embeddeds[i] }
 
 // NumMethods returns the total number of methods of interface t.
 func (t *Interface) NumMethods() int { return len(t.allMethods) }

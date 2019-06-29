@@ -442,7 +442,7 @@ func (p *parser) atComma(context string, follow token.Token) bool {
 
 func assert(cond bool, msg string) {
 	if !cond {
-		panic("go/parser internal error: " + msg)
+		panic("github.com/faiface/generics/go/parser internal error: " + msg)
 	}
 }
 
