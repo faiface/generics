@@ -92,6 +92,7 @@ That was just a silly little example. For more complex examples, take a look int
 - [Math utilities](examples/mathutils)
 - [Linked list](examples/list)
 - [Sync map](examples/syncmap)
+- [Priority queue](examples/priorityqueue)
 
 ## The proposal
 
